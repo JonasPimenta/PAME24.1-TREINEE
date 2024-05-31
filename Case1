@@ -1,1 +1,431 @@
+function gerarID(x){
+    var ID;
+    ID= x*2;
+    return ID;
+}
+
+ class Pedido {
+    constructor(IDpedido, IDcliente, status, dataPed) {
+      this.IDpedido = IDpedido;
+      this.IDcliente = IDcliente;
+      this.status = status;
+      this.dataPed = dataPed;
+    }
+  }
+  
+ 
+ class Funcionario {
+    constructor(IDfuncionario, nome, cpf, email, senha) {
+      this.IDfuncionario = IDfuncionario;
+      this.nome = nome;
+      this.cpf = cpf;
+      this.email = email;
+      this.senha = senha;
+    }
+  }
+  
+
+  class Cliente {
+    constructor(IDcliente, nome, dataNsc, cpf, senha, email) {
+      this.IDcliente = IDcliente;
+      this.nome = nome;
+      this.dataNsc = dataNsc;
+      this.cpf = cpf;
+      this.email = email;
+      this.senha = senha;
+    }
+  }
+  
+ 
+  class Produto {
+    constructor(validade, preco, estoque, nome, descricao) {
+      this.nome = nome;
+      this.descricao = descricao;
+      this.preco = preco;
+      this.estoque = estoque;
+      this.validade = validade;
+    }
+  }
+  
+  var requisicao = require('readline-sync');
+  class Sistema {
+    constructor() {
+      this.pedidos = [];
+      this.funcionarios = [];
+      this.clientes = [];
+      this.produtos = [];
+    }
+  
+    fazerLogin() {
+     
+      var Email = requisicao.question('Digite seu email:\n');
+      var Senha = requisicao.question('Digite sua senha:\n');
+      for ( i=0 ; i<this.clientes.length ; i++){
+        if (Email==this.clientes[i].email && Senha==this.clientes[i].senha){
+            var Ucliente = this.clientes[i];
+            return Ucliente;
+        }
+        else if (Email==this.funcionarios[i].email && Senha==this.funcionarios[i].senha){
+            var Ufuncionario = this.funcionarios[i];
+            return Ufuncionario;
+      }
+      console.log("Email ou senha incorretos\n");
+      return null;
+
+    }
+}
+  
+    fazerCadastroCliente() {
+      
+      let nome = requisicao.question('Digite seu Nome:\n');
+    let cpf = parseInt(requisicao.question('Digite seu cpf:\n'));
+    let dataNsc = requisicao.question('Digite sua data de nascimento\n');
+    let email = requisicao.question('Digite seu email:\n');
+    let senha = requisicao.question('Escolha uma senha:\n');
+    let IDcliente = gerarID(cpf);
+    let cliente = new Cliente(IDcliente,nome,dataNsc,cpf,senha,email);
+    this.clientes.push(cliente);
+    }
+    
+    fazerCadastroFuncionario(){
+        
+        let nome = requisicao.question('Digite seu Nome:\n');
+        let cpf = parseInt(requisicao.question('Digite seu cpf:\n'));
+        let email = requisicao.question('Digite seu email:\n');
+        let senha = requisicao.question('Escolha uma senha:\n');
+        let IDfuncionario = gerarID(cpf);
+        let funcionario = new Funcionario(IDfuncionario,nome,cpf,email,senha);
+        this.funcionarios.push(funcionario);
+    }
+  
+    sairDoPrograma() {
+     
+      return;
+    }
+  
+    
+    verMeusDadosFuncionario(Ufuncionario ) {
+      
+      console.log(Ufuncionario);
+    }
+  
+    modificarMeusDados(Ufuncionario) {
+    
+      while (true){
+        let alterar = requisicao.question("Qual dado deseja alterar? \n");
+        if (alterar == "nome"){
+            Ufuncionario[nome] = requisicao.question('Digite um nome: \n');
+        }
+        else if (alterar == "cpf"){
+            Ufuncionario[cpf] = requisicao.question("Digite um cpf:\n");
+        }
+        else if ( alterar == "email"){
+            Ufuncionario[email] = requisicao.question("Digite um email:\n");
+        }
+        else if (alterar == "senha"){
+            Ufuncionario[senha] = requisicao.question("Digite uma senha:\n");
+        }
+        let continuarAlterando = requisicao.question("Deseja alterar outro dado? s/n \n");
+        if (continuarAlterando == "n"){
+            return false ;
+        }
+      }
+    }
+  
+    verListaPedidos() {
+     
+      this.pedidos.sort();
+      console.log(this.pedidos);
+    }
+  
+    verListaProdutos() {
+      
+      this.produtos.sort();
+      console.log(this.produtos);
+    }
+  
+    verListaClientes() {
+     
+      this.clientes.sort();
+      console.log(this.clientes);
+    }
+  
+    mudarStatusPedido(IDpedido, novoStatus) {
+     
+      IDpedido = parseInt(requisicao.question('Digite o ID do pedido:\n'));
+      novoStatus = requisicao.question("Digite o novo status:\n");
+      for (i = 0; i<this.pedidos.length; i++){
+        if (IDpedido == this.pedidos[i].IDpedido){
+          this.pedidos[i].status = novoStatus;
+          console.log("Status do pedido alterado");
+          return;
+        }
+      console.log("ID do pedido nao encontrado");
+      }
+      
+    }
+  
+    adicionarProduto() {
+     
+      let validade = requisicao.question("Digite a validade do produto: \n");
+      let preco = requisicao.question("Digite o preço do produto:\n");
+      let estoque = requisicao.question("Digite o numero de produtos em estoque\n");
+      let nome = requisicao.question("Digite o nome do produto:\n");
+      let descricao = requisicao.question("Digite a descrição do produto:\n");
+      var produto = new Produto (validade, preco, estoque, nome, descricao);
+      this.produtos.push(produto);
+      
+    }
+  
+    editarProduto(nome) {
+     
+      let nome = requisicao.question("Digite o nome do produto a ser editado:\n");
+      for ( i = 0; i<this.produtos.length; i++){
+        if (nome == this.produtos[i].nome){
+          var editProduto = this.produtos[i];
+        }
+
+      }
+      while (true){
+        let alterar = requisicao.question("Qual dado deseja alterar? \n");
+        if (alterar == "validade"){
+            editProduto[validade] = requisicao.question('Digite um validade: \n');
+        }
+        else if (alterar == "preco"){
+            editProduto[preco] = requisicao.question("Digite um preco:\n");
+        }
+        else if ( alterar == "estoque"){
+            editProduto[estoque] = requisicao.question("Digite um estoque:\n");
+        }
+        else if (alterar == "nome"){
+            editProduto[nome] = requisicao.question("Digite uma nome:\n");
+        }
+        else if (alterar == "descricao"){
+          editProduto[descricao] = requisicao.question("Digite uma descricao para o produto:\n");
+
+        }
+        let continuarAlterando = requisicao.question("Deseja alterar outro dado? s/n \n");
+        if (continuarAlterando == "n"){
+            return false ;
+          
+        }
+      }
+      
+    }
+  
+    excluirProduto(nome) {
+   
+      let nome = requisicao.question("Digite o nome do produto a ser editado:\n");
+      for ( i = 0; i<this.produtos.length; i++){
+        if (nome == this.produtos[i].nome){
+          var exclProduto = this.produtos[i];
+    }
+        this.produtos.pop(exclProduto);
+      }
+      console.log("Produto exlcuido");
+    }
+    
+    verMeusDadosCliente(Ucliente) {
+      
+      console.log(Ucliente);
+    }
+  
+    modificarMeusDadosCliente (Ucliente){
+      
+      while (true){
+        let alterar = requisicao.question("Qual dado deseja alterar? \n");
+        if (alterar == "nome"){
+            Ucliente[nome] = requisicao.question('Digite um nome: \n');
+        }
+        else if (alterar == "cpf"){
+            Ucliente[cpf] = requisicao.question("Digite um cpf:\n");
+        }
+        else if ( alterar == "email"){
+            Ucliente[email] = requisicao.question("Digite um email:\n");
+        }
+        else if (alterar == "senha"){
+            Ucliente[senha] = requisicao.question("Digite uma senha:\n");
+        }
+        else if (alterar == "data de nascimento"){
+          Ucliente[dataNsc] = requisicao.question("Digite sua data de nascimento");
+        }
+        let continuarAlterando = requisicao.question("Deseja alterar outro dado? s/n \n");
+        if (continuarAlterando == "n"){
+            return false ;
+        
+        }
+        
+      }
+      
+    }
+  
+    fazerPedido(Ucliente) {
+      
+      let IDpedido = 2*Ucliente[IDcliente];
+      let IDcliente = Ucliente[IDcliente];
+      let status = "Pedido em andamento";
+      let dataPed = Date.today();
+      let Novopedido = new Pedido (IDpedido, IDcliente, status, dataPed);
+      this.pedidos.push(Novopedido);
+      console.log("Pedido realizado");
+    }
+  
+    cancelarPedido(pedidoID) {
+      
+      let pedidoID = requisicao.question("Digite o ID do pedido a ser excluido:\n");
+      for ( i = 0; i<this.pedidos.length; i++){
+        if (pedidoID == this.pedidos[i].IDpedido){
+          var cancelarPedido = this.pedidos[i];
+    }
+        this.pedidos.pop(cancelarPedido);
+        console.log("Pedido cancelado ");
+    }}
+  
+    verMeusPedidos() {
+      
+      console.log(this.pedidos);
+    }
+  
+    avaliarPedido(pedidoId, avaliacao) {
+     
+    }
+  
+    visualizarAvaliacoes() {
+      
+    }
+  
+  }
+  var readline = require('readline-sync');
+
+
+
+
+function exibirMenuPrincipal() {
+    console.log("Bem-vindo ao Sistema de Pedidos!");
+    console.log("1. Fazer login");
+    console.log("2. Cadastro de cliente");
+    console.log("3. Cadastro de funcionário");
+    console.log("4. Sair do programa");
+}
+
+
+function exibirMenuFuncionario() {
+    console.log("Menu do Funcionário");
+    console.log("1. Ver meus dados");
+    console.log("2. Modificar meus dados");
+    console.log("3. Ver lista de pedidos");
+    console.log("4. Ver lista de produtos");
+    console.log("5. Mudar status de um pedido");
+    console.log("6. Adicionar produto");
+    console.log("7. Editar produto");
+    console.log("8. Excluir produto");
+    console.log("9. Sair");
+}
+
+
+function exibirMenuCliente() {
+    console.log("Menu do Cliente");
+    console.log("1. Ver meus dados");
+    console.log("2. Modificar meus dados");
+    console.log("3. Fazer pedido");
+    console.log("4. Cancelar pedido");
+    console.log("5. Ver meus pedidos");
+    console.log("6. Avaliar pedido");
+    console.log("7. Visualizar avaliações");
+    console.log("8. Sair");
+}
+
+
+const sistema = new Sistema();
+
+
+while (true) {
+    exibirMenuPrincipal();
+    const opcaoPrincipal = parseInt(readline.question('Escolha uma opção: '));
+
+    switch (opcaoPrincipal) {
+        case 1:
+            const usuarioLogado = sistema.fazerLogin();
+            if (usuarioLogado instanceof Cliente) {
+                while (true) {
+                    exibirMenuCliente();
+                    const opcaoCliente = parseInt(readline.question('Escolha uma opção: '));
+                   
+                    if (opcaoCliente ==1){
+                      sistema.verMeusDadosCliente(Ucliente);
+
+                    }
+                    else if (opcaoCliente==2){
+                      sistema.modificarMeusDadosCliente(Ucliente);
+                    }
+                    else if (opcaoCliente==3){
+                      sistema.fazerPedido();
+                    }
+                    else if (opcaoCliente==4){
+                      sistema.cancelarPedido();
+                    }
+                    else if (opcaoCliente==5){
+                      sistema.verMeusPedidos();
+                    }
+                  
+                    else if (opcaoCliente==6){
+                      sistema.avaliarPedido();
+                    }
+                    else if (opcaoCliente==7){
+                      sistema.visualizarAvaliacoes();
+                    }
+                    else if (opcaoCliente ==8) {
+                        break;
+                    }
+                }
+            } else if (usuarioLogado instanceof Funcionario) {
+                while (true) {
+                    exibirMenuFuncionario();
+                    const opcaoFuncionario = parseInt(readline.question('Escolha uma opção: '));
+                    
+                    if (opcaoFuncionario==1){
+                      sistema.verMeusDadosFuncionario(Ufuncionario);
+                    }
+                    if (opcaoFuncionario==2){
+                      sistema.modificarMeusDados(Ufuncionario);
+                    }
+                    if (opcaoFuncionario==3){
+                      sistema.verListaPedidos();
+                    }
+                    if (opcaoFuncionario==4){
+                      sistema.verListaProdutos();
+                    }
+                    if (opcaoFuncionario==5){
+                      sistema.mudarStatusPedido();
+                    }
+                    if (opcaoFuncionario==6){
+                      sistema.adicionarProduto();
+                    }
+                    if (opcaoFuncionario==7){
+                      sistema.editarProduto();
+                    }
+                    if (opcaoFuncionario==8){
+                      sistema.excluirProduto();
+                    }
+                    if (opcaoFuncionario === 9) {
+                        break;
+                    }
+                }
+            } else {
+                console.log("Email ou senha incorretos.");
+            }
+            break;
+        case 2:
+            sistema.fazerCadastroCliente();
+            break;
+        case 3:
+            sistema.fazerCadastroFuncionario();
+            break;
+        case 4:
+            sistema.sairDoPrograma();
+            return;
+        default:
+            console.log("Opção inválida.");
+    }
+}
 
